@@ -4,20 +4,31 @@
 #include "XSUB.h"
 #include "net/pfvar.h"
 
+#define TRUE 1
+#define FALSE 0
+
 MODULE = PF
 PACKAGE = PF
 PROTOTYPES: DISABLE
 
 typedef struct {
 	int fd;
+	int open;
 } p_pf_t;
 
 void
 new()
-PPCODE:
+PREINIT:
+	p_pf_t *self;
+CODE:
+	
 	if ((self = malloc(sizeof(p_pf_t))) == NULL) {
 	}
 	self->fd = -1;
+	self->open = FALSE;
+	RETVAL = self;
+OUTPUT
+	RETVAL
 
 void
 open(self, devpath = Nullsv)
